@@ -6,17 +6,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { UnidadeModule } from './unidade/unidade.module';
 
+
 @NgModule({
   declarations: [
-    AppComponent  
-    
+    AppComponent    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    UnidadeModule
-    
+    UnidadeModule    
   ],
   providers: [],
   bootstrap: [AppComponent]

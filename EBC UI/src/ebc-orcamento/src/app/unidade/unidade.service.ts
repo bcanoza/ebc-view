@@ -21,8 +21,8 @@ export class UnidadeService {
     
 
   save(unidade: Unidade) {
-    
 
+    console.log(unidade);
     
   }
 

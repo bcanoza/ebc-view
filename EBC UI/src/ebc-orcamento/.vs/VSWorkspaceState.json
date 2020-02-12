@@ -1,6 +1,13 @@
 {
   "ExpandedNodes": [
-    "\\src"
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\unidade",
+    "\\src\\app\\unidade\\unidade-form",
+    "\\src\\app\\util",
+    "\\src\\app\\util\\form-erro-view"
   ],
+  "SelectedNode": "\\src\\app\\unidade\\unidade-form\\unidade-form.component.ts",
   "PreviewInSolutionExplorer": false
 }
