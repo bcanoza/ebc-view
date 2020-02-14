@@ -15,12 +15,24 @@ export class PaginationDTO {
   public number: number = 0;
   public empty: boolean;
 
+  public sort: String = "id";
+  public sortReverse: boolean = false;
+
   constructor() {    
   }
 
   public converter(): string {
-    
+
+    let ordem = ",asc";
+
+    if (this.sortReverse) {
+      ordem = ",desc";
+    }
+
     return "?page=" + (this.number) +
-      "&size=" + this.size;
+      "&size=" + this.size +
+      "&sort=" + this.sort
+      + ordem
+      ;
   }
 }
