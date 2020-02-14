@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Unidade } from '../unidade';
-import { UnidadeService } from '../unidade.service';
+
 import { PaginationDTO } from '../../util/pagination-DTO';
+import { UnidadeService } from '../../service/unidade.service';
 
 @Component({
   selector: 'unidade-list',
@@ -24,8 +25,7 @@ export class UnidadeListComponent implements OnInit {
    }
 
   public findAll(): void {
-
-    console.log(this.paginador.size);
+   
 
     this.unidadeService.findAll(this.paginador.converter()).subscribe(
       unidadePaginationDTO => {
@@ -34,8 +34,7 @@ export class UnidadeListComponent implements OnInit {
         this.paginador.totalElements = unidadePaginationDTO.totalElements;
         this.paginador.number = unidadePaginationDTO.number;
         
-        this.unidades = <Unidade[]>unidadePaginationDTO.content;
-
+        this.unidades = <Unidade[]>unidadePaginationDTO.content;        
 
         this.listaPaginacao = [];
         let i = 0;

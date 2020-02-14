@@ -1,98 +1,96 @@
 
   <div class="container">
-    <form [formGroup]="formulario" (ngSubmit)="salvarUnidade()">
+
+    <div class="row offset-lg-2">
+      <h1 class="border-bottom border-secondary">Cadastro de Unidade</h1>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="saveUnidade()">
 
       <div class="row">
-        <div class="col-6 col-md-4 offset-md-2">
+        <div class="col-12 col-lg-8 offset-lg-2">
           <div class="form-group" [ngClass]="aplicaCssErro('id')">
             <label for="id">Id</label>
-            <input type="text" class="form-control" id="id" formControlName="id" [value]="unidade.id" readonly/>
+
+            <div class="input-group">
+              <input type="text" class="form-control bg-info" id="id" formControlName="id" readonly />
+              <div class="input-group-apend">
+                <button type="submit" class="nav-item btn btn-primary" [disabled]="formulario.invalid" title="Salvar unidade"><i class="fas fa-save"></i></button>
+              </div>
+            </div>
             <form-erro-view [mostrarErro]="isFieldInvalid('id')"
                             msgErro="Id é obrigatório">
             </form-erro-view>
           </div>
         </div>
-        <nav class="navbar">
-          <button type="submit" class="nav-item btn btn-primary" [disabled]="formulario.invalid">Salvar</button>
-        </nav>
+
       </div>
 
       <div class="row">
-        <div class="col-12 col-md-8 offset-md-2">
+        <div class="col-12 col-lg-8 offset-lg-2">
           <div class="form-group" [ngClass]="aplicaCssErro('nome')">
             <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" formControlName="nome" [value]="unidade.nome" (input)="unidade.nome = $event.target.value" />
+            <input type="text" class="form-control" id="nome" formControlName="nome" placeholder="Digite o nome da unidade" />
             <form-erro-view [mostrarErro]="isFieldInvalid('nome')"
-                            msgErro="Nome é obrigatório">
+                            msgErro="Nome da unidade é obrigatório">
             </form-erro-view>
           </div>
         </div>
       </div>
 
       <div class="row">
-        <div class="form-group col-12 col-md-4 offset-md-2" [ngClass]="aplicaCssErro('codigo')">
+        <div class="form-group col-12 col-lg-8 offset-lg-2" [ngClass]="aplicaCssErro('codigo')">
           <label for="codigo">Código Preferencial:</label>
-          <input type="text" class="form-control" id="codigo" formControlName="codigo" [value]="unidade.codigo" readonly/>
-          <form-erro-view [mostrarErro]="isFieldInvalid('codigo')"
-                          msgErro="Código é obrigatório e deve ter no máximo 8 caracteres">
-          </form-erro-view>
-        </div>
-
-        <div class="form-group col-12 col-md-4">
-          <label for="codigoNovo">Adicionar mais códigos:</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="codigoNovo" #codigoNovo formControlName="codigoNovo"/>
+            <input type="text" class="form-control bg-info" id="codigo" formControlName="codigo" readonly placeholder="Selecione um código como principal" />
             <div class="input-group-apend">
-              <button class="btn btn-primary" type="button" (click)="adicionarCodigo(codigoNovo.value)">
+              <button class="btn btn-primary" type="button" (click)="newCodigo()"
+                      [disabled]="codigos.length >0 && codigos.invalid" title="Adicionar novo código">
                 <i class="fas fa-plus-circle"></i>
               </button>
             </div>
           </div>
-          <form-erro-view [mostrarErro]="false"
-                          msgErro="Código é obrigatório e deve ter no máximo 8 caracteres">
+          <form-erro-view [mostrarErro]="isFieldInvalid('codigo')"
+                          msgErro="Selecione um código preferencial para a unidade">
           </form-erro-view>
         </div>
+
+
       </div>
 
+      <div formArrayName="codigos" [ngClass]="aplicaCssErro('codigos')">
 
-      <div class="row justify-content-center">
-        <div class="table-responsive col-12 col-md-8 mt-5">
-          <table class="table table-striped table-bordered table-hover" responsive="true">
-            <thead class="thead-dark">
-              <tr>
-                <th class="text-center">Códigos </th>
-                <th class="text-center">Preferencial</th>
-                <th class="text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let codigo of unidade?.codigos" >
-                <td class="text-center">{{codigo}}</td>
-                <td class="text-center">
-                  <i class="fas fa-check-square text-success" *ngIf="codigo == unidade.codigo"></i>
-                <td class="text-center">
-                  <a href="#" title="Código preferencial" data-toggle="tooltip" (click)="setPreferencial(codigo)">
-                    <i class="fas fa-check-square text-success mr-3"> </i>
-                  </a>
+        <div *ngFor="let codigo of codigos.controls; index as i" class="row mb-3">
 
-                  <a href="#" title="Editar" data-toggle="tooltip" (click)="editarCodigo(codigo)">
-                    <i class="fas fa-edit text-warning mr-3"></i>
-                  </a>
-                  <a href="#" title="Excluir" data-toggle="tooltip" (click)="deletarCodigo(codigo)">
-                    <i class="fas fa-trash text-danger"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="col-10 col-lg-8 offset-lg-2">
+            <input [formControlName]="i" placeholder="Digite o novo código" class="form-control" [id]="'codigo' + i">
+          </div>
+
+          <div class="col-2">
+            <a href="#" title="Selecionar código preferencial" data-toggle="tooltip" (click)="setCodigoPreferencial(i)">
+              <i class="fas fa-check-square text-success mr-3"> </i>
+            </a>
+
+            <a href="#" title="Deletar o código" data-toggle="tooltip" (click)="deleteCodigo(i)">
+              <i class="fas fa-trash text-danger"></i>
+            </a>
+          </div>
         </div>
+
+        <form-erro-view [mostrarErro]="isFieldInvalid('codigos')"
+                        msgErro="Todo código da unidade deve ter no máximo 8 letras,não pode estar vazio e ser único"
+                        class="row col-lg-8 offset-lg-2 pl-lg-1"
+                        *ngIf="codigos.length>0">
+        </form-erro-view>
       </div>
 
     </form>
+    <form-debug [form]="formulario"></form-debug>
   </div>
+
   
 
-<form-debug [form]="formulario" ></form-debug>
+
 
 
 

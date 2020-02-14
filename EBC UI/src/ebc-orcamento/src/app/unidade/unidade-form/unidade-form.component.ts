@@ -1,8 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
 import { Unidade } from '../unidade';
-import { UnidadeService } from '../unidade.service';
+
+import { MinhaValidacao } from '../../util/minha-validacao';
+import { UnidadeService } from '../../service/unidade.service';
+import { BsModalService } from 'ngx-bootstrap/modal/public_api';
+import { AlertModalService } from '../../util/alert-modal/alert-modal.service';
 
 @Component({
   selector: 'unidade-form',
@@ -11,86 +15,61 @@ import { UnidadeService } from '../unidade.service';
 })
 export class UnidadeFormComponent implements OnInit {
 
-  @Input()
-  unidade: Unidade;
-
   formulario: FormGroup;
+  @Output() save: EventEmitter<any> = new EventEmitter();
   
-  constructor(private unidadeService: UnidadeService, private formBuilder: FormBuilder) { }
+  constructor(
+    private unidadeService: UnidadeService,
+    private formBuilder: FormBuilder,
+    private alertService: AlertModalService
+  ) { }
 
-  ngOnInit(): void {
-    this.unidade = new Unidade();
+  ngOnInit(): void {   
 
     this.formulario = this.formBuilder.group({
-      id: [{ value: null, disabled: true} ],
+      id: [null ],
       nome: [null, [Validators.required]],
       codigo: [null, [Validators.required, Validators.maxLength(8)]],
-      codigoNovo: [null, [Validators.required, Validators.maxLength(8)]],
-      codigos: this.formBuilder.group({})
+      codigos: this.formBuilder.array([], [Validators.required, MinhaValidacao.unique])
     });
   }
 
+  saveUnidade(): void {
+    this.unidadeService.save(this.unidade).subscribe(
+      unidade => {
+        this.save.emit(unidade);
+      },
+      error => {
+        this.alertService.showAlertDanger("Não conseguei salvar :(")
+      },
+      () => {
+        this.resetForm();
+        this.alertService.showAlertSucess("Salvo com sucesso \o/");
+      }
+    );
     
-
-  setPreferencial(codigo: string): void {
-    this.unidade.codigo = codigo;
-    this.formulario.get("codigo").setValue(codigo);
   }
 
-  salvarUnidade(): void {
-    console.log(JSON.stringify(this.formulario.value));
-    this.unidadeService.save(this.unidade);
-    this.resetForm();
+  setCodigoPreferencial(codigo: number): void {
+    this.codigo.setValue(this.codigos.at(codigo).value);
+  }
+   
+  newCodigo(): void {
+    this.codigos.push(this.formBuilder.control(null, [Validators.required, Validators.maxLength(8)]));
   }
 
-  editarCodigo(codigo: string): void {
-    this.formulario.patchValue({
-      codigoNovo: codigo
-    });
-
-    this.remover(codigo);
-  }
-
-  adicionarCodigo(codigo:string): void {
-
-    if (this.unidade.codigo == "") {
-      this.unidade.codigo = codigo;
-      this.formulario.get("codigo").setValue(codigo);
-      
-    }
-    this.formulario.patchValue({
-      codigoNovo: ""
-    });
-    this.unidade.codigos.push(codigo);    
-  }
-
-  deletarCodigo(codigo: string): void {
-
-    if (codigo == this.unidade.codigo) {
+  deleteCodigo(codigo: number): void {
+    console.log(this.codigos.at(codigo));
+    if (this.codigos.at(codigo).value == this.codigo.value) {
       alert("Não posso deletar a unidade preferencial");
       return;
     }
-
-    this.remover(codigo);
+    this.codigos.removeAt(codigo);    
   }
-
-  remover(codigo: string) {
-
-    for (let i = 0; i < this.unidade.codigos.length; i++) {
-      if (this.unidade.codigos[i] === codigo) {
-        this.unidade.codigos.splice(i, 1);
-
-        if (this.unidade.codigo === codigo) {
-          this.unidade.codigo == "";
-          this.formulario.get("codigo").setValue("");
-        }
-      }
-    }  
-  }
-
-
+ 
   resetForm(): void {
     this.formulario.reset();
+    this.codigos.clear();
   }
 
   aplicaCssErro(campo) { 
@@ -103,4 +82,30 @@ export class UnidadeFormComponent implements OnInit {
     return this.formulario.get(campo).invalid && (this.formulario.get(campo).touched || this.formulario.get(campo).dirty);
   }
 
+  get codigos(): FormArray {
+    return <FormArray>this.formulario.get("codigos");
+  }
+
+  get codigo() {
+    return this.formulario.get("codigo");
+  }
+
+  set unidade(unidade: Unidade) {
+    this.resetForm();
+
+    if (unidade == null) {
+      return;
+    }
+
+    unidade?.codigos.forEach(cdg => {
+      this.codigos.push(this.formBuilder.control(cdg, [Validators.required, Validators.maxLength(8)]));
+    })
+
+    this.formulario.setValue(unidade);
+    
+  }
+
+  get unidade(): Unidade {
+    return Object.assign(new Unidade(), this.formulario.value);
+  }
 }

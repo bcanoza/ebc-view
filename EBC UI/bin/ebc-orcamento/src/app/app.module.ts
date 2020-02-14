@@ -5,17 +5,19 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import { UnidadeModule } from './unidade/unidade.module';
+import { StaticModule } from './static/static.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent    
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    UnidadeModule    
+    UnidadeModule,
+    StaticModule
   ],
   providers: [],
   bootstrap: [AppComponent]

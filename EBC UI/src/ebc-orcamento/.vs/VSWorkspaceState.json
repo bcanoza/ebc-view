@@ -3,11 +3,12 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\service",
     "\\src\\app\\unidade",
-    "\\src\\app\\unidade\\unidade-form",
+    "\\src\\app\\unidade\\unidade-list",
     "\\src\\app\\util",
-    "\\src\\app\\util\\form-erro-view"
+    "\\src\\environments"
   ],
-  "SelectedNode": "\\src\\app\\unidade\\unidade-form\\unidade-form.component.ts",
+  "SelectedNode": "\\src\\app\\unidade\\unidade-list\\unidade-list.component.ts",
   "PreviewInSolutionExplorer": false
 }

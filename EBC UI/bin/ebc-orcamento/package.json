@@ -22,6 +22,7 @@
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@rxweb/reactive-form-validators": "^1.9.9-beta1",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
     "popper.js": "^1.16.1",
