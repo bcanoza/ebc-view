@@ -1,6 +1,6 @@
 import { Unidade } from '../unidade/unidade';
 
-export class PaginationDTO {
+export class PaginationDTO { 
 
   public content: Object[];
 
@@ -11,7 +11,7 @@ export class PaginationDTO {
   public first: boolean;
 
   
-  public size: number = 2;
+  public size: number = 10;
   public number: number = 0;
   public empty: boolean;
 
@@ -22,7 +22,7 @@ export class PaginationDTO {
   }
 
   public converter(): string {
-
+    this.check();
     let ordem = ",asc";
 
     if (this.sortReverse) {
@@ -34,5 +34,11 @@ export class PaginationDTO {
       "&sort=" + this.sort
       + ordem
       ;
+  }
+
+  check() {
+    if (this.number * this.size > this.totalElements){
+      this.number = 0;
+    }
   }
 }

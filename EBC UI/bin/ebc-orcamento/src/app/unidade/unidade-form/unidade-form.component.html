@@ -1,11 +1,13 @@
 
   <div class="container">
 
-    <div class="row offset-lg-2">
-      <h1 class="border-bottom border-secondary">Cadastro de Unidade</h1>
+    <div class="row">
+      <nav class="col-12 col-lg-8 offset-lg-2 navbar navbar-light bg-light pl-3">
+        <h2 class="mr-auto">Unidade</h2>
+      </nav>      
     </div>
 
-    <form [formGroup]="formulario" (ngSubmit)="saveUnidade()">
+    <form [formGroup]="formulario" class="mt-3" (ngSubmit)="saveUnidade()">
 
       <div class="row">
         <div class="col-12 col-lg-8 offset-lg-2">
@@ -15,15 +17,15 @@
             <div class="input-group">
               <input type="text" class="form-control bg-info" id="id" formControlName="id" readonly />
               <div class="input-group-apend">
-                <button type="submit" class="nav-item btn btn-primary" [disabled]="formulario.invalid" title="Salvar unidade"><i class="fas fa-save"></i></button>
+                <button type="submit" class="nav-item btn btn-dark" [disabled]="formulario.invalid" title="Salvar unidade"><i class="fas fa-save"></i></button>
               </div>
             </div>
-              <form-erro-view [mostrarErro]="isFieldInvalid('id')"
-                              msgErro="Id é obrigatório">
-              </form-erro-view>
-            </div>
+            <form-erro-view [mostrarErro]="isFieldInvalid('id')"
+                            msgErro="Id é obrigatório">
+            </form-erro-view>
           </div>
-      
+        </div>
+
       </div>
 
       <div class="row">
@@ -44,7 +46,7 @@
           <div class="input-group">
             <input type="text" class="form-control bg-info" id="codigo" formControlName="codigo" readonly placeholder="Selecione um código como principal" />
             <div class="input-group-apend">
-              <button class="btn btn-primary" type="button" (click)="newCodigo()"
+              <button class="btn btn-dark" type="button" (click)="newCodigo()"
                       [disabled]="codigos.length >0 && codigos.invalid" title="Adicionar novo código">
                 <i class="fas fa-plus-circle"></i>
               </button>
@@ -67,12 +69,12 @@
           </div>
 
           <div class="col-2">
-            <a href="#" title="Selecionar código preferencial" data-toggle="tooltip" (click)="setCodigoPreferencial(i)">
-              <i class="fas fa-check-square text-success mr-3"> </i>
+            <a title="Selecionar código preferencial" data-toggle="tooltip" (click)="setCodigoPreferencial(i)">
+              <i class="fas fa-asterisk text-warning mr-3"> </i>
             </a>
 
-            <a href="#" title="Deletar o código" data-toggle="tooltip" (click)="deleteCodigo(i)">
-              <i class="fas fa-trash text-danger"></i>
+            <a title="Deletar o código" data-toggle="tooltip" (click)="deleteCodigo(i)">
+              <i class="fas fa-times text-danger"></i>
             </a>
           </div>
         </div>
@@ -83,8 +85,11 @@
                         *ngIf="codigos.length>0">
         </form-erro-view>
       </div>
+
     </form>
+   
   </div>
+
   
 
 

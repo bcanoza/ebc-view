@@ -35,10 +35,12 @@ export class UnidadeListComponent implements OnInit {
   public findAll(): void {   
 
     this.unidadeService.findAll(this.paginador.converter()).subscribe(
+
       unidadePaginationDTO => {
 
         this.paginador.totalPages = unidadePaginationDTO.totalPages;
         this.paginador.totalElements = unidadePaginationDTO.totalElements;
+
         this.paginador.number = unidadePaginationDTO.number;
 
         this.unidades = <Unidade[]>unidadePaginationDTO.content;
@@ -65,7 +67,26 @@ export class UnidadeListComponent implements OnInit {
     );
   }
 
-  
+  public filter(valor:string){
+
+    if (!valor){
+      this.findAll();
+      return;
+    }
+    
+    this.unidadeService.filter(valor).subscribe(
+      unidades =>{
+        this.unidades = <Unidade[]>unidades;
+      },
+      error => {
+        this.unidades = [];
+      },
+      () =>{
+
+      }
+
+    );
+  }
 
   public sort(prop: string) {
 
@@ -101,7 +122,7 @@ export class UnidadeListComponent implements OnInit {
   }
 
   public goToPage(pageNumber: number) {
-
+   
     if (pageNumber < 1) {
       pageNumber = 1;
     }
@@ -109,7 +130,7 @@ export class UnidadeListComponent implements OnInit {
       pageNumber = this.paginador.totalPages;
     }
 
-    if (this.paginador.number != pageNumber) {
+    if (this.paginador.number != (pageNumber-1)) {
       this.paginador.number = pageNumber - 1;
       this.findAll();
     }
@@ -124,8 +145,8 @@ export class UnidadeListComponent implements OnInit {
     this.goToPage(this.paginador.number+2);
   }
 
-  public goToPageBack() {
-    this.goToPage(this.paginador.number - 1);
+  public goToPageBack() {    
+    this.goToPage(this.paginador.number);
   }
 
   public goToPageLast() {

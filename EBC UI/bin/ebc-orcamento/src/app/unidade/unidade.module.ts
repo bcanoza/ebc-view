@@ -8,6 +8,7 @@ import { UnidadeFormComponent } from './unidade-form/unidade-form.component';
 import { UnidadeListComponent } from './unidade-list/unidade-list.component';
 import { UtilModule } from '../util/util.module';
 import { UnidadeService } from '../service/unidade.service';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 
@@ -21,6 +22,7 @@ import { UnidadeService } from '../service/unidade.service';
     FormsModule,
     ReactiveFormsModule,
     RxReactiveFormsModule,
+    AppRoutingModule,
     UtilModule
 
   ],

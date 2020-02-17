@@ -1,14 +1,4 @@
-* {
-    font-size:1.4rem;
-}
 
-h1 {
-
-    
-    margin-bottom: 20px;
-
-    font-size: 1.5em;
-}
 .form-control::-webkit-input-placeholder {
   color: #221919;
 }

@@ -61,7 +61,7 @@ export class UnidadeFormComponent implements OnInit {
   deleteCodigo(codigo: number): void {
     console.log(this.codigos.at(codigo));
     if (this.codigos.at(codigo).value == this.codigo.value) {
-      alert("Não posso deletar a unidade preferencial");
+      this.alertService.showAlertDanger("Não posso deletar a unidade preferencial")
       return;
     }
     this.codigos.removeAt(codigo);    

@@ -1,0 +1,8 @@
+.layout__cabecalho {
+  height: 20px;
+  width: 100%;
+
+  background-color: rgb(237,42,27);
+
+  text-align: right;
+}

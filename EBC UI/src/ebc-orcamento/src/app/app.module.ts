@@ -8,11 +8,23 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { UnidadeModule } from './unidade/unidade.module';
 import { StaticModule } from './static/static.module';
+import { InsumoComponent } from './insumo/insumo.component';
+import { CpuComponent } from './cpu/cpu.component';
+import { EapComponent } from './eap/eap.component';
+import { AditivoComponent } from './aditivo/aditivo.component';
+import { MemoriaCalculoComponent } from './memoria-calculo/memoria-calculo.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    InsumoComponent,
+    CpuComponent,
+    EapComponent,
+    AditivoComponent,
+    MemoriaCalculoComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 
 import { Unidade } from '../unidade';
 
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { MinhaValidacao } from '../../util/minha-validacao';
 import { UnidadeService } from '../../service/unidade.service';
+import { BsModalService } from 'ngx-bootstrap/modal/public_api';
+import { AlertModalService } from '../../util/alert-modal/alert-modal.service';
 
 @Component({
   selector: 'unidade-form',
@@ -15,22 +16,38 @@ import { UnidadeService } from '../../service/unidade.service';
 export class UnidadeFormComponent implements OnInit {
 
   formulario: FormGroup;
+  @Output() save: EventEmitter<any> = new EventEmitter();
   
-  constructor(private unidadeService: UnidadeService, private formBuilder: FormBuilder) { }
+  constructor(
+    private unidadeService: UnidadeService,
+    private formBuilder: FormBuilder,
+    private alertService: AlertModalService
+  ) { }
 
   ngOnInit(): void {   
 
     this.formulario = this.formBuilder.group({
-      id: [{ value: null, disabled: true} ],
+      id: [null ],
       nome: [null, [Validators.required]],
       codigo: [null, [Validators.required, Validators.maxLength(8)]],
       codigos: this.formBuilder.array([], [Validators.required, MinhaValidacao.unique])
     });
   }
-    
+
   saveUnidade(): void {
-    this.unidadeService.save(this.unidade);
-    this.resetForm();
+    this.unidadeService.save(this.unidade).subscribe(
+      unidade => {
+        this.save.emit(unidade);
+      },
+      error => {
+        this.alertService.showAlertDanger("Não conseguei salvar :(")
+      },
+      () => {
+        this.resetForm();
+        this.alertService.showAlertSucess("Salvo com sucesso \o/");
+      }
+    );
+    
   }
 
   setCodigoPreferencial(codigo: number): void {
@@ -44,7 +61,7 @@ export class UnidadeFormComponent implements OnInit {
   deleteCodigo(codigo: number): void {
     console.log(this.codigos.at(codigo));
     if (this.codigos.at(codigo).value == this.codigo.value) {
-      alert("Não posso deletar a unidade preferencial");
+      this.alertService.showAlertDanger("Não posso deletar a unidade preferencial")
       return;
     }
     this.codigos.removeAt(codigo);    
@@ -71,6 +88,21 @@ export class UnidadeFormComponent implements OnInit {
 
   get codigo() {
     return this.formulario.get("codigo");
+  }
+
+  set unidade(unidade: Unidade) {
+    this.resetForm();
+
+    if (unidade == null) {
+      return;
+    }
+
+    unidade?.codigos.forEach(cdg => {
+      this.codigos.push(this.formBuilder.control(cdg, [Validators.required, Validators.maxLength(8)]));
+    })
+
+    this.formulario.setValue(unidade);
+    
   }
 
   get unidade(): Unidade {
